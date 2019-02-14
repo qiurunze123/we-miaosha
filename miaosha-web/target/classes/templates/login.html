@@ -10,7 +10,8 @@
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
     <!-- bootstrap -->
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
-    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap-3.3.2-dist/css/bootstrap.css}" />
+	<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
     <!-- jquery-validator -->
     <script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
     <script type="text/javascript" th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
@@ -20,7 +21,12 @@
     <script type="text/javascript" th:src="@{/js/md5.min.js}"></script>
     <!-- common.js -->
     <script type="text/javascript" th:src="@{/js/common.js}"></script>
-    
+	<script type="text/javascript" th:src="@{/js/bootstrap-3.3.2-dist/js/bootstrap.js}"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/jquery-validation/jquery.validate.js}"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/jquery-validation/localization/messages_zh.js}"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/jquery.form.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.bootstrap.min.js}"></script>
+
 </head>
 <body>
 <div class="wrap login_wrap">
@@ -32,7 +38,7 @@
 				<div class="login_title">
 					登录
 				</div>
-				<form name="loginForm" id="loginForm"  >
+				<form name="loginForm" id="loginForm" action="/login/loginin" >
 
 					<div class="form_text_ipt">
 						<input id="nickname" name = "nickname" class="form-control" type="text" placeholder="手机号码" required="true"  />
@@ -92,7 +98,6 @@ function login(){
 }
 function doLogin(){
 	var password = $("#password").val();
-
 	$.ajax({
 		url: "/login/loginin",
 	    type: "POST",
@@ -101,14 +106,10 @@ function doLogin(){
 	    	password: password
 	    },
 	    success:function(data){
-	    	layer.closeAll();
 	    	if(data.code == 0){
-                $.messager.confirm("提示","登陆成功,点击确定跳转到商品页面",function(){
                     window.location.href="/goods/to_list";
-                });
-
 	    	}else{
-	    		layer.msg(data.message);
+	    		layer.msg("");
 	    	}
 	    },
 	    error:function(){

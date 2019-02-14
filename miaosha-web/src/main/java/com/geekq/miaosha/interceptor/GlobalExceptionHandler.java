@@ -1,7 +1,7 @@
-package com.geekq.miasha.exception;
+package com.geekq.miaosha.interceptor;
 
-import com.geekq.miasha.enums.enums.ResultStatus;
 import com.geekq.miasha.enums.resultbean.ResultGeekQ;
+import com.geekq.miasha.exception.GlobleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
@@ -16,19 +16,21 @@ import java.util.List;
 import static com.geekq.miasha.enums.enums.ResultStatus.SESSION_ERROR;
 import static com.geekq.miasha.enums.enums.ResultStatus.SYSTEM_ERROR;
 
-
 /**
- * 拦截异常
- * @author  qiurunze
+ * @author 邱润泽
+ *
+ * @ExceptionHandler 拦截了异常，我们可以通过该注解实现自定义异常处理。
+ * 其中，@ExceptionHandler 配置的 value 指定需要拦截的异常类型，上面拦截了 Exception.class 这种异常。
  */
 @ControllerAdvice
-@ResponseBody
-public class GlobleExceptionHandler {
+public class GlobalExceptionHandler {
 
-    private static Logger logger =  LoggerFactory.getLogger(GlobleExceptionHandler.class);
 
+    public static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ResponseBody
     @ExceptionHandler(value=Exception.class)
-    public ResultGeekQ<String> exceptionHandler(HttpServletRequest request , Exception e){
+    public ResultGeekQ<String> exceptionHandler(Exception e){
         e.printStackTrace();
         if(e instanceof GlobleException){
             GlobleException ex= (GlobleException)e;

@@ -39,8 +39,8 @@ public class LoginController {
 
     @RequestMapping("/loginin")
     @ResponseBody
-    public ResultGeekQ<Boolean> dologin(HttpServletResponse response, @Valid LoginVo loginVo) {
-        ResultGeekQ<Boolean> result = ResultGeekQ.build();
+    public ResultGeekQ<String> dologin(HttpServletResponse response, @Valid LoginVo loginVo) {
+        ResultGeekQ<String> result = ResultGeekQ.build();
         logger.info(loginVo.toString());
         userService.login(response, loginVo);
         return result;
