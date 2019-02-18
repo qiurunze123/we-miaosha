@@ -1,5 +1,9 @@
 package com.geekq.miaosha.rabbitmq;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.geekq.api.entity.GoodsVoOrder;
+import com.geekq.api.utils.AbstractResultOrder;
+import com.geekq.api.utils.ResultGeekQOrder;
 import com.geekq.miaosha.redis.RedisService;
 import com.geekq.miaosha.service.GoodsService;
 import com.geekq.miaosha.service.MiaoShaMessageService;
@@ -7,6 +11,8 @@ import com.geekq.miaosha.service.MiaoshaService;
 import com.geekq.miaosha.service.OrderService;
 import com.geekq.miasha.entity.MiaoshaOrder;
 import com.geekq.miasha.entity.MiaoshaUser;
+import com.geekq.miasha.enums.enums.ResultStatus;
+import com.geekq.miasha.exception.GlobleException;
 import com.geekq.miasha.vo.GoodsVo;
 import com.geekq.miasha.vo.MiaoShaMessageVo;
 import com.rabbitmq.client.Channel;
@@ -36,6 +42,9 @@ public class MQReceiver {
 		@Autowired
         MiaoshaService miaoshaService;
 
+		@Reference(version = "${demo.service.version}",retries = 3,timeout = 6000)
+		private com.geekq.api.service.GoodsService goodsServiceRpc;
+
 //		@Autowired
 //        MiaoShaMessageService messageService ;
 		
@@ -46,7 +55,13 @@ public class MQReceiver {
 			MiaoshaUser user = mm.getUser();
 			long goodsId = mm.getGoodsId();
 
-			GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+//			GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+			ResultGeekQOrder<GoodsVoOrder> goodsVoOrderResultGeekQOrder = goodsServiceRpc.getGoodsVoByGoodsId(goodsId);
+			if(!AbstractResultOrder.isSuccess(goodsVoOrderResultGeekQOrder)){
+				throw new GlobleException(ResultStatus.SESSION_ERROR);
+			}
+
+			GoodsVoOrder goods= goodsVoOrderResultGeekQOrder.getData();
 	    	int stock = goods.getStockCount();
 	    	if(stock <= 0) {
 	    		return;
