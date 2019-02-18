@@ -40,7 +40,7 @@ public class GoodsController extends BaseController {
     @Autowired
     private GoodsService goodsService;
 
-    @Reference(version = "${demo.service.version}")
+    @Reference(version = "${demo.service.version}",retries = 3,timeout = 6000)
     private com.geekq.api.service.GoodsService goodsServiceRpc;
 
     @Autowired
@@ -58,7 +58,7 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user) {
         model.addAttribute("user", user);
-//        ResultGeekQ<List<com.geekq.api.entity.GoodsVo>> goodsList1 =  goodsServiceRpc.listGoodsVo();
+        List<com.geekq.api.entity.GoodsVo> goodsVos = goodsServiceRpc.listGoodsVo();
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodsList);
         return render(request,response,model,"goods_list", GoodsKey.getGoodsList,"");
