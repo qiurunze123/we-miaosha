@@ -61,14 +61,14 @@ public class GoodsController extends BaseController {
      * */
     @RequestMapping(value="/to_list", produces="text/html")
     @ResponseBody
-    public String list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user) throws Exception {
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user)  {
         model.addAttribute("user", user);
 
         //订单服务化接口 miaosha-order
         ResultGeekQOrder<List<GoodsVoOrder>> resultGoods = goodsServiceRpc.listGoodsVo();
 
         if(!AbstractResultOrder.isSuccess(resultGoods)){
-           throw new Exception("sss");
+           throw new GlobleException(ResultStatus.SYSTEM_ERROR);
         }
         List<GoodsVoOrder> goodsList = resultGoods.getData();
         model.addAttribute("goodsList", goodsList);
