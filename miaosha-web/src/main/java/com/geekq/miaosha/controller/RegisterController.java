@@ -80,6 +80,7 @@ public class RegisterController {
     @ResponseBody
     public ResultGeekQ<Boolean> register(@RequestParam("username") String userName ,
                                         @RequestParam("password") String passWord,
+                                         @RequestParam("mail") String mail,
                                         HttpServletResponse response ,
                                         HttpServletRequest request){
 
