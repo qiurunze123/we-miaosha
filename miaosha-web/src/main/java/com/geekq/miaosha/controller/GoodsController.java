@@ -1,9 +1,9 @@
 package com.geekq.miaosha.controller;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.geekq.api.entity.GoodsVoOrder;
 import com.geekq.api.utils.AbstractResultOrder;
 import com.geekq.api.utils.ResultGeekQOrder;
+import com.geekq.miaosha.interceptor.RequireLogin;
 import com.geekq.miaosha.redis.GoodsKey;
 import com.geekq.miaosha.redis.RedisService;
 import com.geekq.miaosha.service.GoodsService;
@@ -45,7 +45,7 @@ public class GoodsController extends BaseController {
     @Autowired
     private GoodsService goodsService;
 
-    @Reference(version = "${demo.service.version}",retries = 3,timeout = 6000)
+    @Autowired
     private com.geekq.api.service.GoodsService goodsServiceRpc;
 
     @Autowired
@@ -59,6 +59,7 @@ public class GoodsController extends BaseController {
      * 5000 * 10
      * QPS:2884, load:5
      * */
+    @RequireLogin(seconds = 5, maxCount = 5, needLogin = true)
     @RequestMapping(value="/to_list", produces="text/html")
     @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user)  {

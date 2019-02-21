@@ -1,29 +1,21 @@
 package com.geekq.miaosha.rabbitmq;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.geekq.api.entity.GoodsVoOrder;
 import com.geekq.api.utils.AbstractResultOrder;
 import com.geekq.api.utils.ResultGeekQOrder;
 import com.geekq.miaosha.redis.RedisService;
 import com.geekq.miaosha.service.GoodsService;
-import com.geekq.miaosha.service.MiaoShaMessageService;
 import com.geekq.miaosha.service.MiaoshaService;
 import com.geekq.miaosha.service.OrderService;
 import com.geekq.miasha.entity.MiaoshaOrder;
 import com.geekq.miasha.entity.MiaoshaUser;
 import com.geekq.miasha.enums.enums.ResultStatus;
 import com.geekq.miasha.exception.GlobleException;
-import com.geekq.miasha.vo.GoodsVo;
-import com.geekq.miasha.vo.MiaoShaMessageVo;
-import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 public class MQReceiver {
@@ -42,7 +34,7 @@ public class MQReceiver {
 		@Autowired
         MiaoshaService miaoshaService;
 
-		@Reference(version = "${demo.service.version}",retries = 3,timeout = 6000)
+		@Autowired
 		private com.geekq.api.service.GoodsService goodsServiceRpc;
 
 //		@Autowired

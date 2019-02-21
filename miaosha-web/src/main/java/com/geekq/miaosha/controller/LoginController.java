@@ -33,11 +33,9 @@ public class LoginController {
     @Reference(version = "${demo.service.version}",mock = "return null")
     private DemoService demoService;
 
-    @RequestMapping("/sayHello/{name}")
-    @ResponseBody
-    public String sayHello(@PathVariable("name") String name) throws Exception {
-       String aaa =  demoService.sayHello(name) ;
-        return "ssdadasd";
+    @RequestMapping("/sayHello")
+    public String sayHello() throws Exception {
+        return "login222";
     }
 
 
