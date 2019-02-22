@@ -11,6 +11,7 @@ import com.geekq.miasha.utils.MD5Utils;
 import com.geekq.miasha.utils.UUIDUtil;
 import com.geekq.miasha.vo.LoginVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,12 @@ public class MiaoShaUserService {
       return   miaoShaUserMapper.getCountByUserName(userName,USERTYPE_NORMAL) <=0;
 
     }
+
+    public boolean getMailByUserName(String userName , String mail){
+
+        return miaoShaUserMapper.getMailByUserName(userName,mail)>0;
+
+    }
     public MiaoshaUser getByToken(HttpServletResponse response , String token) {
 
         if(StringUtils.isEmpty(token)){
@@ -75,26 +82,32 @@ public class MiaoShaUserService {
 
 
     // http://blog.csdn.net/tTU1EvLDeLFq5btqiK/article/details/78693323
-    public boolean updatePassword(String token, String nickName, String formPass) {
+    public boolean updatePassword(String nickName, String passWord,HttpServletResponse response) {
         //取user
         MiaoshaUser user = getByNickName(nickName);
         if(user == null) {
             throw new GlobleException(MOBILE_NOT_EXIST);
         }
+        String salt = MD5Utils.getSaltT();
+        String DBPassWord =  MD5Utils.formPassToDBPass(passWord ,salt);
         //更新数据库
         MiaoshaUser toBeUpdate = new MiaoshaUser();
         toBeUpdate.setNickname(nickName);
-        toBeUpdate.setPassword(MD5Utils.formPassToDBPass(formPass, user.getSalt()));
+        toBeUpdate.setPassword(DBPassWord);
+        toBeUpdate.setSalt(salt);
         miaoShaUserMapper.update(toBeUpdate);
         //处理缓存
         redisService.delete(MiaoShaUserKey.getByNickName, ""+nickName);
         user.setPassword(toBeUpdate.getPassword());
+        //生成cookie 将session返回游览器 分布式session
+        String token= UUIDUtil.uuid();
+        addCookie(response, token, user);
         redisService.set(MiaoShaUserKey.token, token, user);
         return true;
     }
 
 
-    public boolean register(String userName , String passWord ,
+    public boolean register(String userName , String passWord ,String mail,
                             HttpServletResponse response , HttpServletRequest request) {
         MiaoshaUser miaoShaUser =  new MiaoshaUser();
         miaoShaUser.setNickname(userName);
@@ -105,6 +118,7 @@ public class MiaoShaUserService {
         miaoShaUser.setRegisterDate(new Date());
         miaoShaUser.setSalt(salt);
         miaoShaUser.setNickname(userName);
+        miaoShaUser.setMail(mail);
         try {
             miaoShaUserMapper.insertMiaoShaUser(miaoShaUser);
             IpLog log = new IpLog(userName,new Date(),request.getRemoteAddr(),
@@ -114,8 +128,6 @@ public class MiaoShaUserService {
             if(user == null){
                 return false;
             }
-
-
             //生成cookie 将session返回游览器 分布式session
             String token= UUIDUtil.uuid();
             addCookie(response, token, user);

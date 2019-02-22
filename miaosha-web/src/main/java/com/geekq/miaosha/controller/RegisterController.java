@@ -3,7 +3,10 @@ package com.geekq.miaosha.controller;
 import com.geekq.miaosha.redis.redismanager.RedisLua;
 import com.geekq.miaosha.service.MiaoShaUserService;
 import com.geekq.miaosha.service.MiaoshaService;
+import com.geekq.miasha.enums.enums.ResultStatus;
 import com.geekq.miasha.enums.resultbean.ResultGeekQ;
+import com.geekq.miasha.utils.CheckCommonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +58,15 @@ public class RegisterController {
         return "register2";
     }
 
+    /**
+     * 注册页面
+     * @return
+     */
+    @RequestMapping("/registervforget")
+    public String registervforget(){
+        return "registervforget";
+    }
+
 
     /**
      * 校验程序
@@ -71,6 +83,92 @@ public class RegisterController {
     }
 
     /**
+     * 校验程序
+     * @return
+     */
+    @RequestMapping("/checkUsernameForget")
+    @ResponseBody
+    public ResultGeekQ<Boolean> checkUsernameForget(String username){
+
+        ResultGeekQ<Boolean> result =  ResultGeekQ.build();
+        boolean nickNameCount = miaoShaUserService.getNickNameCount(username);
+        result.setData(!nickNameCount);
+        return result;
+    }
+
+
+
+    /**
+     * 校验程序
+     * @return
+     */
+    @RequestMapping("/checkMail")
+    @ResponseBody
+    public ResultGeekQ<Boolean> checkMail(String mail){
+
+        ResultGeekQ<Boolean> result =  ResultGeekQ.build();
+
+        if(StringUtils.isEmpty(mail)){
+            result.withError(ResultStatus.RESIGETER_FAIL);
+            return result;
+        }
+        logger.info("此邮箱打印为：mail"+mail);
+        boolean checkMail = CheckCommonUtils.checkEmail(mail);
+        result.setData(checkMail);
+        return result;
+    }
+
+
+    /**
+     * 校验程序
+     * @return
+     */
+    @RequestMapping("/checkMailForget")
+    @ResponseBody
+    public ResultGeekQ<Boolean> checkMailForget(String username , String mail){
+
+        ResultGeekQ<Boolean> result =  ResultGeekQ.build();
+
+        if(StringUtils.isEmpty(mail)){
+            result.withError(ResultStatus.RESIGETER_FAIL);
+            return result;
+        }
+        logger.info("此邮箱打印为：mail"+mail);
+        boolean checkMail = miaoShaUserService.getMailByUserName(username,mail);
+
+        if(!checkMail){
+            result.withError(ResultStatus.MAIL_NOT_EXIST);
+            return result;
+        }
+        result.setData(checkMail);
+        return result;
+    }
+
+
+    /**
+     * 更新密码
+     * @param userName
+     * @param passWord
+     * @return
+     */
+    @RequestMapping("/registerUpdate")
+    @ResponseBody
+    public ResultGeekQ<Boolean> registerUpdate(@RequestParam("username") String userName ,
+                                         @RequestParam("password") String passWord,
+                                         @RequestParam("mail") String mail,
+                                         HttpServletResponse response ,
+                                         HttpServletRequest request){
+
+        ResultGeekQ<Boolean> result = ResultGeekQ.build();
+        boolean registerInfo  = miaoShaUserService.updatePassword(userName,passWord,response);
+        if(!registerInfo){
+            result.withError(RESIGETER_FAIL.getCode(),RESIGETER_FAIL.getMessage());
+            result.setData(false);
+        }
+        result.setData(true);
+        return result;
+    }
+    /**
      * 注册网站
      * @param userName
      * @param passWord
@@ -85,7 +183,7 @@ public class RegisterController {
                                         HttpServletRequest request){
 
         ResultGeekQ<Boolean> result = ResultGeekQ.build();
-        boolean registerInfo  = miaoShaUserService.register(userName,passWord,response ,request);
+        boolean registerInfo  = miaoShaUserService.register(userName,passWord,mail,response ,request);
         if(!registerInfo){
            result.withError(RESIGETER_FAIL.getCode(),RESIGETER_FAIL.getMessage());
             result.setData(false);

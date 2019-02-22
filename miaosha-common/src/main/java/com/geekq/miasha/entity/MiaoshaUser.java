@@ -23,6 +23,7 @@ public class MiaoshaUser {
 	private Date registerDate;
 	private Date lastLoginDate;
 	private Integer loginCount;
+	private String mail;
 	@Override
 	public String toString() {
 		return "Logininfo{" +

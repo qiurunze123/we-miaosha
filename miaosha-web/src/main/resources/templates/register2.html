@@ -54,6 +54,21 @@
 			});
 			return ret;
 		}, "用户名已经存在!");
+
+        $.validator.addMethod("checkMail", function(value, element) {
+            var ret=false;
+            $.ajax({
+                dataType:"json",
+                type:"post",
+                url:"/checkMail",
+                data:{mail:value},
+                async:false,
+                success:function(data){
+                    ret= data.data;
+                }
+            });
+            return ret;
+        }, "邮箱格式错误!");
 		
 		$("#registerForm").validate({
 			rules:{
@@ -72,6 +87,7 @@
 
                 "mail":{//需要后台处理  验证邮箱是否存在 和格式是否正确
                     required:true,
+                    checkMail:true
                 },
 			},
 			messages:{

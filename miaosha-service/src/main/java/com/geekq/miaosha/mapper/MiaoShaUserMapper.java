@@ -18,4 +18,6 @@ public interface MiaoShaUserMapper {
 
     public int getCountByUserName(@Param("userName")String userName , @Param("userType")int userType);
 
+    public int getMailByUserName(@Param("userName")String userName , @Param("mail")String mail);
+
 }
