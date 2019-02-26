@@ -1,6 +1,7 @@
 package com.geekq.miaosha.redis.redission;
 
 import com.geekq.miaosha.service.GoodsService;
+import com.geekq.miaosha.service.LoginInfoService;
 import com.geekq.miasha.vo.GoodsVo;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  */
 @Configuration
-public class RedissonConfig {
+public class RedissonConfig implements LoginInfoService {
 
     @Value("${redis.host}")
     private String host;
@@ -35,9 +36,9 @@ public class RedissonConfig {
 
     @Bean
     public RedissonClient getRedisson(){
-        List<GoodsVo> goodsList = goodsService.listGoodsVo();
-        if (goodsList == null) {
-        }
+//        List<GoodsVo> goodsList = goodsService.listGoodsVo();
+//        if (goodsList == null) {
+//        }
         Config config = new Config();
         config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
         //添加主从配置
@@ -46,4 +47,9 @@ public class RedissonConfig {
         return Redisson.create(config);
     }
 
+    @Override
+    @Bean
+    public String checkName() {
+        return null;
+    }
 }
