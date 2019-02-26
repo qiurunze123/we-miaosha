@@ -30,6 +30,7 @@
         <com.zk.client>0.1</com.zk.client>
         <curator-framework.version>4.0.1</curator-framework.version>
         <dubbo.starter.version>0.2.0</dubbo.starter.version>
+        <redission.varsion>3.5.7</redission.varsion>
     </properties>
 
     <dependencies>
@@ -44,6 +45,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- redisson -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>${redission.varsion}</version>
+        </dependency>
         <dependency>
             <groupId>com.geekq</groupId>
             <artifactId>miaosha-common</artifactId>

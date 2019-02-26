@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50562
 File Encoding         : 65001
 
-Date: 2019-02-13 19:05:07
+Date: 2019-02-26 17:52:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -336,24 +336,21 @@ CREATE TABLE `miaosha_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID，手机号码',
   `nickname` varchar(255) NOT NULL,
   `password` varchar(32) DEFAULT NULL COMMENT 'MD5(MD5(pass明文+固定salt) + salt)',
+  `mail` varchar(32) DEFAULT NULL COMMENT '邮箱地址',
   `salt` varchar(20) DEFAULT NULL,
   `head` varchar(128) DEFAULT NULL COMMENT '头像，云存储的ID',
   `register_date` datetime DEFAULT NULL COMMENT '注册时间',
   `last_login_date` datetime DEFAULT NULL COMMENT '上蔟登录时间',
   `login_count` int(11) DEFAULT '0' COMMENT '登录次数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18912341258 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=18912341261 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of miaosha_user
 -- ----------------------------
-INSERT INTO `miaosha_user` VALUES ('18912341238', '18612766138', 'b7797cce01b4b131b433b6acf4add449', '1a2b3c4d', null, '2019-01-09 17:08:16', null, '0');
-INSERT INTO `miaosha_user` VALUES ('18912341248', '18612766122', 'fac9465b740927c2022bec2c9d34ff65', '1a2b3c4d', null, '2019-02-03 13:29:39', null, '0');
-INSERT INTO `miaosha_user` VALUES ('18912341253', 'qiurunze1234', '3b73de3931d4e763036c7d1c57f8da06', 'rfHWSXBSgGak+692sE3J', null, '2019-02-07 09:52:59', null, '0');
-INSERT INTO `miaosha_user` VALUES ('18912341254', 'qiurunze12345', '5d50fdef255f945bfd716c11bf1c7395', 'S1/dD1b1SHxCFmatEk53', null, '2019-02-07 09:53:14', null, '0');
-INSERT INTO `miaosha_user` VALUES ('18912341255', 'qiurunze111', '8afabe7ab668033b1a165ab02ac0563a', '3dugTaLzrFcATKRsiqd5', null, '2019-02-07 10:00:32', null, '0');
-INSERT INTO `miaosha_user` VALUES ('18912341256', 'qiurunze123', 'ab4322e6432970fb983118c14d05b577', 'hQmJaNOKYw6e2TzANDEj', null, '2019-02-10 01:14:23', null, '0');
-INSERT INTO `miaosha_user` VALUES ('18912341257', 'qq111111', 'c4cf5cfe364c46812f59437360e0fb4b', 'FhIDGaeblUQQFMGzS+Tp', null, '2019-02-10 01:22:55', null, '0');
+INSERT INTO `miaosha_user` VALUES ('18912341258', 'qwwwww', '48e7e0f9b082aa9a8b1fc53dd2af2596', null, '+E8IHFXuMiWJpyQuqvRe', null, '2019-02-21 11:24:57', null, '0');
+INSERT INTO `miaosha_user` VALUES ('18912341259', 'qiurunze', '3341386488@qq.com', '98992c6fa6166652c74533e76c865d93', 'qbNQxU10ZV3oPFiprxxq', null, '2019-02-22 07:37:13', null, '0');
+INSERT INTO `miaosha_user` VALUES ('18912341260', 'qiurunze1', '2ffc3d0eab913779d0e4e7eac54b26c2', '3341386488@qq.com', '1Cm2vVRMUBYHxV1RMsMJ', null, '2019-02-22 07:39:16', null, '0');
 
 -- ----------------------------
 -- Table structure for `order_info`
