@@ -225,23 +225,6 @@ public class MiaoshaController implements InitializingBean {
      *
      * @throws Exception
      */
-//    @Override
-//    public void afterPropertiesSet() throws Exception {
-//        List<GoodsVo> goodsList = goodsService.listGoodsVo();
-//        if (goodsList == null) {
-//            return;
-//        }
-//        for (GoodsVo goods : goodsList) {
-//            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), goods.getStockCount());
-//            localOverMap.put(goods.getId(), false);
-//        }
-//    }
-
-    /**
-     * 系统初始化
-     *
-     * @throws Exception
-     */
     @Override
     public void afterPropertiesSet() throws Exception {
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
@@ -249,15 +232,32 @@ public class MiaoshaController implements InitializingBean {
             return;
         }
         for (GoodsVo goods : goodsList) {
-            Integer stock = goods.getGoodsStock()/10;
-            int num = 0;
-            for(int i =1 ; i<goods.getGoodsStock();i++){
-                num ++;
-                if(i%10 == 0){
-                    redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId()+"_"+i, stock);
-                    localOverMaptwo.put(goods.getId()+"_"+i, false);
-                }
-            }
+            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), goods.getStockCount());
+            localOverMap.put(goods.getId(), false);
         }
     }
+
+//    /**
+//     * 系统初始化
+//     *
+//     * @throws Exception
+//     */
+//    @Override
+//    public void afterPropertiesSet() throws Exception {
+//        List<GoodsVo> goodsList = goodsService.listGoodsVo();
+//        if (goodsList == null) {
+//            return;
+//        }
+//        for (GoodsVo goods : goodsList) {
+//            Integer stock = goods.getStockCount()/10;
+//            int num = 0;
+//            for(int i =1 ; i<goods.getGoodsStock();i++){
+//                num ++;
+//                if(i%10 == 0){
+//                    redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId()+"_"+i, stock);
+//                    localOverMaptwo.put(goods.getId()+"_"+i, false);
+//                }
+//            }
+//        }
+//    }
 }
