@@ -21,6 +21,30 @@ public class RedisService {
 
 
 	/**
+	 * 用来 分布式锁 来生成随机数字 判断在哪个集群中 已10为单位
+	 * @param countAll
+	 * @return
+	 */
+	public static int getRedisRandNum(Integer countAll ){
+		/**
+		 * 分10段 共有数量100个  10个一组
+		 */
+		int num =0;
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i <=countAll ; i++) {
+			num ++;
+			if(i%10 == 0){
+				list.add(i);
+			}
+		}
+		//产生0-(arr.length-1)的整数值,也是数组的索引
+		int index=(int)(Math.random()*list.size());
+		int rand = list.get(index);
+		return rand ;
+	}
+
+
+	/**
 	 * 设置失效时间
 	 * @param key
 	 * @param value
